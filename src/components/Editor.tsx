@@ -85,7 +85,7 @@ export const Editor = () => {
         <TwitterPicker color={color} onChangeComplete={(c) => setColor(c.hex)} />
         <ColumnContainer>
           <Switch checked={isRandomSize} onChange={toggleRandomSize} label="Random size" />
-          <Switch checked={isRandomColor} onChange={setIsRandomColor} label="Random color" />
+          <Switch checked={isRandomColor} onChange={toggleRandomColor} label="Random color" />
         </ColumnContainer>
       </Container>
       <Board items={items} selectedId={selectedId} toggleSelect={setSelectedId}></Board>

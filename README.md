@@ -5,3 +5,4 @@ Use hotkeys when you play:
 - 'q', 'w' - random color/size
 
 Click and drag any node.
+Play around with random colors and sizes.

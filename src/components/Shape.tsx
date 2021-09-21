@@ -13,8 +13,8 @@ export const ShapeStyled = styled.div<ShapeProps>((props) => ({
   border: props.isSelected ? `0.2rem solid ${props.selectedColor}` : undefined,
   zIndex: props.isSelected ? 2 : 1,
   position: "absolute",
-  top: props.center.y, //window.innerHeight / 2,
-  left: props.center.x //window.innerWidth / 2,
+  top: props.center.y,
+  left: props.center.x
 }));
 
 ShapeStyled.defaultProps = {

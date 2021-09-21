@@ -11,4 +11,4 @@ Click and drag any node.
 Play around with random colors and sizes.
 
 ## Demo
-https://user-images.githubusercontent.com/729374/134093529-b2d32bb7-4f65-4063-998f-b86abf082f00.mp4
+https://user-images.githubusercontent.com/729374/134095488-f8307130-04ba-4e53-a594-ece864b398b2.mp4

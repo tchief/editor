@@ -3,6 +3,7 @@ import { Shape, Square, Circle, ShapeId } from "../types";
 import { ShapeProps } from "./Shape";
 import { SquareComponent } from "./Square";
 import { CircleComponent } from "./Circle";
+import { Text } from "./Text";
 
 const NotSupportedComponent = <div>This shape is not yet supported.</div>;
 
@@ -21,7 +22,11 @@ export const ShapeFactory = (props: ShapeProps & ShapeFactoryProps) => {
 
   switch (true) {
     case props.item instanceof Square:
-      return <SquareComponent ref={ref} onMouseDown={handleMouseDown} {...(props.item as Square)} {...props} />;
+      return (
+        <SquareComponent ref={ref} onMouseDown={handleMouseDown} {...(props.item as Square)} {...props}>
+          <Text>{props.text}</Text>
+        </SquareComponent>
+      );
     case props.item instanceof Circle:
       return <CircleComponent ref={ref} onMouseDown={handleMouseDown} {...(props.item as Circle)} {...props} />;
     default:

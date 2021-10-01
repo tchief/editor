@@ -6,6 +6,7 @@ export interface ShapeProps {
   selectedColor?: string;
   isSelected?: boolean;
   center: Point;
+  text?: string;
 }
 
 export const ShapeStyled = styled.div<ShapeProps>((props) => ({
@@ -13,8 +14,11 @@ export const ShapeStyled = styled.div<ShapeProps>((props) => ({
   border: props.isSelected ? `0.2rem solid ${props.selectedColor}` : undefined,
   zIndex: props.isSelected ? 2 : 1,
   position: "absolute",
-  top: props.center.y, //window.innerHeight / 2,
-  left: props.center.x //window.innerWidth / 2,
+  top: props.center.y, 
+  left: props.center.x,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center"
 }));
 
 ShapeStyled.defaultProps = {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
 import {
   Circle,
@@ -11,11 +11,14 @@ import {
   DEFAULT_COLOR,
   SQUARE_SIDE,
   CIRCLE_RADIUS,
+  User,
+  getRandomUsers,
 } from "./../types";
 import Board from "./Board";
 import { TwitterPicker } from "react-color";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Toggle } from "./Toggle";
+import { Text } from "./Text";
 
 const Container = styled.div`
   display: flex;
@@ -42,15 +45,30 @@ const Switch = styled(Toggle)`
   padding: 0.5em;
 `;
 
+const LOADING = "Loading..";
+
 export const Editor = () => {
   const [items, setItems] = useState<Shape[]>([]);
   const [selectedId, setSelectedId] = useState<ShapeId>();
   const [color, setColor] = useState<string>(DEFAULT_COLOR);
   const [isRandomSize, setIsRandomSize] = useState(false);
   const [isRandomColor, setIsRandomColor] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
+  const [userName, setUserName] = useState<string>("N/A");
+
+  const itemsRef = useRef(items);
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
 
   const handleAdd = (shape: Shape) => setItems([shape, ...items]);
   const handleRemove = () => selectedId && setItems(items.filter((i) => i.id !== selectedId));
+  const handleUpdate = (shape: Shape) => {
+    const copy = itemsRef.current.filter((i) => i.id !== shape.id);
+    if (copy.length !== itemsRef.current.length) {
+      setItems([...copy, shape]);
+    }
+  };
 
   const cleanScreen = () => setItems([]);
   const addSquare = () => handleAdd(new Square(getColor(), getRandomPosition(), randomSize(SQUARE_SIDE)));
@@ -63,19 +81,45 @@ export const Editor = () => {
   const toggleRandomSize = () => setIsRandomSize(!isRandomSize);
   const toggleRandomColor = () => setIsRandomColor(!isRandomColor);
 
+  const addSquareAsync = async () => {
+    const square = new Square(getColor(), getRandomPosition(), randomSize(SQUARE_SIDE), LOADING);
+    handleAdd(square);
+
+    const promise = new Promise<User>((resolve) => {
+      setTimeout(() => {
+        const users = getRandomUsers();
+        console.log(JSON.stringify(users));
+        setUsers(users);
+        setUserName(users[0].username);
+        resolve(users[0]);
+      }, 3000);
+    });
+
+    const result = await promise;
+    square.text = result.username;
+    handleUpdate(square);
+  };
+
   const deps = [color, items, isRandomSize, isRandomColor];
   useHotkeys("s", addSquare, deps);
   useHotkeys("c", addCircle, deps);
   useHotkeys("q", toggleRandomColor, deps);
   useHotkeys("w", toggleRandomSize, deps);
   useHotkeys("z", cleanScreen, deps);
-  useHotkeys("x", () => { handleRemove(); }, deps);
+  useHotkeys(
+    "x",
+    () => {
+      handleRemove();
+    },
+    deps
+  );
 
   return (
     <>
+      <Text>{userName}</Text>
       <Container>
         <ColumnContainer>
-          <Button onClick={addSquare}>Add square</Button>
+          <Button onClick={addSquareAsync}>Add square</Button>
           <Button onClick={addCircle}>Add circle</Button>
         </ColumnContainer>
         <ColumnContainer>
